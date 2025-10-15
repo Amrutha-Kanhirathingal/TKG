@@ -291,16 +291,16 @@ if ($path =~ /system_lib/) {
 my @dependencies = split(',', $dependencyList);
 # Put all dependent jars hash to array to prepare downloading
 my @jars_info;
-print "jars_info=$jars_info"
+print "Initial jars_info = @jars_info\n";
 foreach my $dependency (keys %jars_to_use) {
 	foreach my $i (@dependencies) {
 		if ($i eq "all" || $dependency eq $i) {
-			print "value of i=$i and value of dependency=$dependency jars_to_use=$jars_to_use"
+			            print "Matched: i = $i, dependency = $dependency, jars_to_use = $jars_to_use{$dependency}\n";
 			push(@jars_info, $jars_to_use{$dependency});
 		}
 	}
 }
-
+print "Final jars_info = @jars_info\n";
 print "--------------------------------------------\n";
 print "Starting download third party dependent jars\n";
 print "--------------------------------------------\n";
