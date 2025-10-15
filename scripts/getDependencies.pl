@@ -317,7 +317,7 @@ if ($task eq "clean") {
 		my $dir = $jars_info[$i]{dir} // "";
 		my $full_dir_path = File::Spec->catdir($path, $dir);
 		my $url_custom = $customUrl;
-print "---------jarinfo element in loop =$i\n url=$url\n fn=$fn\n sha1=$sha1\n dir=$dir\n full_dir_path=$full_dir_path\n url_custom=$url_custom\n----------------"
+		print "--------- jarinfo element in loop = $i\nurl = $url\nfn = $fn\nsha1 = $sha1\ndir = $dir\nfull_dir_path = $full_dir_path\nurl_custom = $url_custom\n----------------\n";
 		if (!-d $full_dir_path) {
 			make_path($full_dir_path, {chmod => 0755, verbose => 1}) or die "Failed to create directory: $full_dir_path: $!";
 			print "Directory created: $full_dir_path\n";
