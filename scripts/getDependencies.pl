@@ -291,9 +291,11 @@ if ($path =~ /system_lib/) {
 my @dependencies = split(',', $dependencyList);
 # Put all dependent jars hash to array to prepare downloading
 my @jars_info;
+echo "jars_info=$jars_info"
 foreach my $dependency (keys %jars_to_use) {
 	foreach my $i (@dependencies) {
 		if ($i eq "all" || $dependency eq $i) {
+			echo "value of i=$i and value of dependency=$dependency jars_to_use=$jars_to_use"
 			push(@jars_info, $jars_to_use{$dependency});
 		}
 	}
@@ -315,7 +317,7 @@ if ($task eq "clean") {
 		my $dir = $jars_info[$i]{dir} // "";
 		my $full_dir_path = File::Spec->catdir($path, $dir);
 		my $url_custom = $customUrl;
-
+echo "---------jarinfo element in loop =$i\n url=$url\n fn=$fn\n sha1=$sha1\n dir=$dir\n full_dir_path=$full_dir_path\n url_custom=$url_custom\n----------------"
 		if (!-d $full_dir_path) {
 			make_path($full_dir_path, {chmod => 0755, verbose => 1}) or die "Failed to create directory: $full_dir_path: $!";
 			print "Directory created: $full_dir_path\n";
