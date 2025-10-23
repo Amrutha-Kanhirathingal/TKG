@@ -324,7 +324,7 @@ if ($task eq "clean") {
 		}
 
 		my $filename = File::Spec->catfile($full_dir_path, $fn);
-		print "shaurl =$shaurl"
+		print "shaurl =$shaurl";
 		my $shaurl = $jars_info[$i]{shaurl};
 		my $shafn = $jars_info[$i]{shafn};
 
