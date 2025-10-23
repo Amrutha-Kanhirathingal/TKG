@@ -316,6 +316,7 @@ if ($task eq "clean") {
 		my $dir = $jars_info[$i]{dir} // "";
 		my $full_dir_path = File::Spec->catdir($path, $dir);
 		my $url_custom = $customUrl;
+		my $thirdParty_Url = $url;
 		print "--------- jarinfo element in loop = $i\nurl = $url\nfn = $fn\nsha1 = $sha1\ndir = $dir\nfull_dir_path = $full_dir_path\nurl_custom = $url_custom\n----------------\n";
 		if (!-d $full_dir_path) {
 			make_path($full_dir_path, {chmod => 0755, verbose => 1}) or die "Failed to create directory: $full_dir_path: $!";
@@ -385,8 +386,8 @@ if ($task eq "clean") {
 			print "$filename exists, not downloading.\n";
 		} else {
 			my $download_success = 0;
-			print "Attempting to download $fn from URL: $url\n";
 			try {
+				print "Attempting to download $fn from URL: $url filename=$filename\n";
 				downloadFile($url, $filename);
 				$download_success = 1;
 			}
@@ -395,9 +396,10 @@ if ($task eq "clean") {
 			};
     		if (!$download_success && $url_custom ne "") {
         	# Determine the original third-party URL from jars_info
-            	my $fallback_url = $jars_info[$i]{url};
-            	print "Falling back to third-party URL for $fn: $fallback_url\n";
+			    print "thirdParty_Url=$thirdParty_Url"
+            	my $fallback_url = $jars_info[$i]{thirdParty_Url};
             	try {
+					print "Falling back to third-party URL for $fn: $fallback_url\n";
             		downloadFile($fallback_url, $filename);
             		$download_success = 1;
     			}
@@ -405,7 +407,6 @@ if ($task eq "clean") {
          			print ":warning: Error: Failed to download $fn from third-party URL ($fallback_url): $_";
         		};
     		}
-    		# If both failed, log and continue
     		if (!$download_success) {
        			print " ERROR: Could not download $fn from either custom or third-party URL.\n";
        			warn "Skipping $fn due to repeated download failure.\n";
