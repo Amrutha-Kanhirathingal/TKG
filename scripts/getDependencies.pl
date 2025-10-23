@@ -406,7 +406,7 @@ if ($task eq "clean") {
 			catch {
 				print ":warning: Warning: Initial download failed for $fn from $artifactUrl: $_";
 			};
-			print "download_success = $download_success "
+			print "download_success = $download_success \n";
     		if (!$download_success) {
 			    print "thirdParty_Url=$thirdParty_Url\n";
             	my $fallback_url = $jars_info[$i]{thirdParty_Url};
