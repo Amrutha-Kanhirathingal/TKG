@@ -395,7 +395,7 @@ if ($task eq "clean") {
 		} else {
 			my $download_success = 0;
 			if ($filename eq "json-simple.jar") {
-				print "filename=$filename"
+				print "filename=$filename";
     			$artifactUrl = "https://openj9-jenkin.osuosl.org/job/test.getDependency/lastSuccessfulBuild/artifact//json-simple.jar ";
 			}
 			try {
