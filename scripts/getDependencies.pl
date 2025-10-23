@@ -26,7 +26,7 @@ use Try::Tiny;
 my $path;
 # define task
 my $task = "default";
-my $dependencyList = "all";
+my $dependencyList = "";
 my $customUrl = "";
 my $curlOpts = "";
 my $artifactUrl="";
