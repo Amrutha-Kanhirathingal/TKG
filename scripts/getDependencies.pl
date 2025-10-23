@@ -288,6 +288,7 @@ if ($path =~ /system_lib/) {
 } else {
 	%jars_to_use = %base;
 }
+if 
 my @dependencies = split(',', $dependencyList);
 # Put all dependent jars hash to array to prepare downloading
 my @jars_info;
@@ -339,9 +340,9 @@ if ($task eq "clean") {
 				print "url_custom ne empty: $url_custom\n";
 			}
 
-			#$url = "$url_custom/$jars_info[$i]{fname}";
-			$artifactUrl = "$url_custom/$jars_info[$i]{fname}";
-			print "artifactUrl: $artifactUrl\n";
+			$url = "$url_custom/$jars_info[$i]{fname}";
+			#$artifactUrl = "$url_custom/$jars_info[$i]{fname}";
+			print "url: $url\n";
 			if (defined $shaurl && $shaurl ne '') {
 				$shaurl = "$url_custom/$shafn";
 			}
@@ -396,15 +397,15 @@ if ($task eq "clean") {
 			my $download_success = 0;
 			if ($filename =~ "json-simple.jar") {
 				print "filenamein else=$filename\n";
-    			$artifactUrl = "https://openj9-jenkin.osuosl.org/job/test.getDependency/lastSuccessfulBuild/artifact//json-simple.jar ";
+    			$url = "https://openj9-jenkin.osuosl.org/job/test.getDependency/lastSuccessfulBuild/artifact//json-simple.jar ";
 			}
 			try {
-				print "Attempting to download $fn from artifact custom Url: $artifactUrl filename=$filename\n";
-				downloadFile($artifactUrl, $filename);
+				print "Attempting to download $fn from artifact custom Url: $url filename=$filename\n";
+				downloadFile($url, $filename);
 				$download_success = 1;
 			}
 			catch {
-				print ":warning: Warning: Initial download failed for $fn from $artifactUrl: $_";
+				print ":warning: Warning: Initial download failed for $fn from $url: $_";
 			};
 			print "download_success = $download_success \n";
     		if (!$download_success && $url ne "") {
