@@ -339,7 +339,7 @@ if ($task eq "clean") {
 			}
 
 			#$url = "$url_custom/$jars_info[$i]{fname}";
-			$artifactUrl = "$url_custom/$jars_info[$i]{fname}";
+			my $artifactUrl = "$url_custom/$jars_info[$i]{fname}";
 			print "artifactUrl: $artifactUrl\n";
 			if (defined $shaurl && $shaurl ne '') {
 				$shaurl = "$url_custom/$shafn";
