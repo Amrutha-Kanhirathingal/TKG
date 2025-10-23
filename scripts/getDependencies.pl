@@ -396,7 +396,7 @@ if ($task eq "clean") {
 			};
     		if (!$download_success && $url_custom ne "") {
         	# Determine the original third-party URL from jars_info
-			    print "thirdParty_Url=$thirdParty_Url"
+			    print "thirdParty_Url=$thirdParty_Url";
             	my $fallback_url = $jars_info[$i]{thirdParty_Url};
             	try {
 					print "Falling back to third-party URL for $fn: $fallback_url\n";
