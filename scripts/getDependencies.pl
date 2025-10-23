@@ -29,7 +29,6 @@ my $task = "default";
 my $dependencyList = "all";
 my $customUrl = "";
 my $curlOpts = "";
-
 GetOptions ("path=s" => \$path,
 			"task=s" => \$task,
 			"dependencyList=s" => \$dependencyList,
@@ -334,10 +333,11 @@ if ($task eq "clean") {
 				$url_custom .= "systemtest_prereqs/";
 				$url_custom .= $jars_info[$i]{dir};
 				$url_custom .= '/' unless $url_custom =~ /\/$/;
+				print "url_custom ne empty: $url_custom\n";
 			}
 
 			$url = "$url_custom/$jars_info[$i]{fname}";
-
+			print "url: $url\n";
 			if (defined $shaurl && $shaurl ne '') {
 				$shaurl = "$url_custom/$shafn";
 			}
@@ -384,8 +384,33 @@ if ($task eq "clean") {
 		if ($ignoreChecksum && -e $filename) {
 			print "$filename exists, not downloading.\n";
 		} else {
-			downloadFile($url, $filename);
-
+			my $download_success = 0;
+			print "Attempting to download $fn from URL: $url\n";
+			try {
+				downloadFile($url, $filename);
+				$download_success = 1;
+			}
+			catch {
+				print ":warning: Warning: Initial download failed for $fn from $url: $_";
+			};
+    		if (!$download_success && $url_custom ne "") {
+        	# Determine the original third-party URL from jars_info
+            	my $fallback_url = $jars_info[$i]{url};
+            	print "Falling back to third-party URL for $fn: $fallback_url\n";
+            	try {
+            		downloadFile($fallback_url, $filename);
+            		$download_success = 1;
+    			}
+        		catch {
+         			print ":warning: Error: Failed to download $fn from third-party URL ($fallback_url): $_";
+        		};
+    		}
+    		# If both failed, log and continue
+    		if (!$download_success) {
+       			print " ERROR: Could not download $fn from either custom or third-party URL.\n";
+       			warn "Skipping $fn due to repeated download failure.\n";
+        		next;  # continue with next jar
+    		}
 			# if shaurl is provided, re-download the sha file and reset the expectedsha value
 			# as the dependent third party jar is newly downloadeded
 			if (!$ignoreChecksum) {
@@ -435,7 +460,7 @@ sub getShaFromFile {
 
 sub downloadFile {
 	my ( $url, $filename ) = @_;
-	print "downloading $url\n";
+	print "downloading $url filename $filename\n";
 	my $output;
 
 	# Delete existing file in case it is tagged incorrectly which curl would then honour..
