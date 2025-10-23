@@ -29,6 +29,7 @@ my $task = "default";
 my $dependencyList = "all";
 my $customUrl = "";
 my $curlOpts = "";
+my artifactUrl="";
 GetOptions ("path=s" => \$path,
 			"task=s" => \$task,
 			"dependencyList=s" => \$dependencyList,
@@ -309,7 +310,6 @@ if ($task eq "clean") {
 	print "cleaning jar task completed.\n"
 } elsif ($task eq "default") {
 	print "downloading dependent third party jars to $path\n";
-	my artifactUrl="";
 	for my $i (0 .. $#jars_info) {
 		my $url = $jars_info[$i]{url};
 		my $fn = $jars_info[$i]{fname};
