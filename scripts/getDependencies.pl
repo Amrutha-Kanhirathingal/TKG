@@ -372,9 +372,9 @@ if ($task eq "clean") {
 			# if expectedsha is not set above and shaurl is provided, download the sha file
 			# and parse the file to get the expected sha
 			if (!$expectedsha && $shaurl) {
-				print "shaurl=$shaurl shafn=$shafn filename=$filename"
+				print "shaurl=$shaurl\n shafn=$shafn\n filename=$filename\n";
 				if ($filename eq "json-simple.jar") {
-				print "filename=$filename"
+				print "filename=$filename\n";
     			$shaurl = "https://openj9-jenkin.osuosl.org/job/test.getDependency/lastSuccessfulBuild/artifact//json-simple.jar ";
 				}
 				downloadFile($shaurl, $shafn);
@@ -395,7 +395,7 @@ if ($task eq "clean") {
 		} else {
 			my $download_success = 0;
 			if ($filename eq "json-simple.jar") {
-				print "filename=$filename";
+				print "filenamein else=$filename\n";
     			$artifactUrl = "https://openj9-jenkin.osuosl.org/job/test.getDependency/lastSuccessfulBuild/artifact//json-simple.jar ";
 			}
 			try {
