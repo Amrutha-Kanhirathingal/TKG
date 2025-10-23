@@ -317,6 +317,7 @@ if ($task eq "clean") {
 		my $full_dir_path = File::Spec->catdir($path, $dir);
 		my $url_custom = $customUrl;
 		my $thirdParty_Url = $url;
+		my artifactUrl=""
 		print "--------- jarinfo element in loop = $i\nurl = $url\nfn = $fn\nsha1 = $sha1\ndir = $dir\nfull_dir_path = $full_dir_path\nurl_custom = $url_custom\n----------------\n";
 		if (!-d $full_dir_path) {
 			make_path($full_dir_path, {chmod => 0755, verbose => 1}) or die "Failed to create directory: $full_dir_path: $!";
@@ -339,7 +340,7 @@ if ($task eq "clean") {
 			}
 
 			#$url = "$url_custom/$jars_info[$i]{fname}";
-			my $artifactUrl = "$url_custom/$jars_info[$i]{fname}";
+			$artifactUrl = "$url_custom/$jars_info[$i]{fname}";
 			print "artifactUrl: $artifactUrl\n";
 			if (defined $shaurl && $shaurl ne '') {
 				$shaurl = "$url_custom/$shafn";
