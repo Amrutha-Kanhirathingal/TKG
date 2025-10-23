@@ -410,12 +410,12 @@ if ($task eq "clean") {
     		if (!$download_success && $url ne "") {
 			    print "thirdParty_Url=$thirdParty_Url\n";
             	try {
-					print "Falling back to third-party URL for $fn: $fallback_url\n";
+					print "Falling back to third-party URL for $fn: $thirdParty_Url\n";
             		downloadFile($thirdParty_Url, $filename);
             		$download_success = 1;
     			}
         		catch {
-         			print ":warning: Error: Failed to download $fn from third-party URL ($fallback_url): $_";
+         			print ":warning: Error: Failed to download $fn from third-party URL ($thirdParty_Url): $_";
         		};
     		}
     		if (!$download_success) {
