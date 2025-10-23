@@ -373,7 +373,7 @@ if ($task eq "clean") {
 			# and parse the file to get the expected sha
 			if (!$expectedsha && $shaurl) {
 				print "shaurl=$shaurl\n shafn=$shafn\n filename=$filename\n";
-				if ($filename eq "json-simple.jar") {
+				if ($filename =~ "json-simple.jar") {
 				print "filename=$filename\n";
     			$shaurl = "https://openj9-jenkin.osuosl.org/job/test.getDependency/lastSuccessfulBuild/artifact//json-simple.jar ";
 				}
@@ -394,7 +394,7 @@ if ($task eq "clean") {
 			print "$filename exists, not downloading.\n";
 		} else {
 			my $download_success = 0;
-			if ($filename eq "json-simple.jar") {
+			if ($filename =~ "json-simple.jar") {
 				print "filenamein else=$filename\n";
     			$artifactUrl = "https://openj9-jenkin.osuosl.org/job/test.getDependency/lastSuccessfulBuild/artifact//json-simple.jar ";
 			}
