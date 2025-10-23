@@ -324,8 +324,8 @@ if ($task eq "clean") {
 		}
 
 		my $filename = File::Spec->catfile($full_dir_path, $fn);
-		print "shaurl =$shaurl";
 		my $shaurl = $jars_info[$i]{shaurl};
+		print "shaurl =$shaurl";
 		my $shafn = $jars_info[$i]{shafn};
 
 		# if url_custom is provided, use url_custom and reset $url and $shaurl
