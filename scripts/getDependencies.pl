@@ -29,7 +29,7 @@ my $task = "default";
 my $dependencyList = "all";
 my $customUrl = "";
 my $curlOpts = "";
-my artifactUrl="";
+my $artifactUrl="";
 GetOptions ("path=s" => \$path,
 			"task=s" => \$task,
 			"dependencyList=s" => \$dependencyList,
