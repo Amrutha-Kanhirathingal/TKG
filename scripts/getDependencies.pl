@@ -292,7 +292,6 @@ if ($path =~ /system_lib/) {
 my @dependencies = split(',', $dependencyList);
 # Put all dependent jars hash to array to prepare downloading
 my @jars_info;
-print "Initial jars_info = @jars_info\n";
 foreach my $dependency (keys %jars_to_use) {
 	foreach my $i (@dependencies) {
 		if ($i eq "all" || $dependency eq $i) {
@@ -301,7 +300,6 @@ foreach my $dependency (keys %jars_to_use) {
 		}
 	}
 }
-print "Final jars_info = @jars_info\n";
 print "--------------------------------------------\n";
 print "Starting download third party dependent jars\n";
 print "--------------------------------------------\n";
@@ -327,7 +325,6 @@ if ($task eq "clean") {
 
 		my $filename = File::Spec->catfile($full_dir_path, $fn);
 		my $shaurl = $jars_info[$i]{shaurl};
-		print "shaurl =$shaurl\n";
 		my $shafn = $jars_info[$i]{shafn};
 
 		# if url_custom is provided, use url_custom and reset $url and $shaurl
