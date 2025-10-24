@@ -288,7 +288,6 @@ if ($path =~ /system_lib/) {
 } else {
 	%jars_to_use = %base;
 }
-if 
 my @dependencies = split(',', $dependencyList);
 # Put all dependent jars hash to array to prepare downloading
 my @jars_info;
@@ -373,8 +372,8 @@ if ($task eq "clean") {
 			# if expectedsha is not set above and shaurl is provided, download the sha file
 			# and parse the file to get the expected sha
 			if (!$expectedsha && $shaurl) {
-				print "shaurl=$shaurl\n shafn=$shafn\n filename=$filename\n";
-				if ($filename =~ "json-simple.jar") {
+				print "shaurl=$shaurl\n shafn=$shafn\n filename=$filename\n expectedsha=$expectedsha\n";
+				if ($filename =~ "json-simple.jar" && ) {
 				print "filename=$filename\n";
     			$shaurl = "https://openj9-jenkin.osuosl.org/job/test.getDependency/lastSuccessfulBuild/artifact//json-simple.jar ";
 				}
@@ -395,10 +394,10 @@ if ($task eq "clean") {
 			print "$filename exists, not downloading.\n";
 		} else {
 			my $download_success = 0;
-			if ($filename =~ "json-simple.jar") {
+			if ($filename =~ "json-simple.jar" && $path =~ /system_lib/) {
 				print "filenamein else=$filename\n";
     			$url = "https://openj9-jenkin.osuosl.org/job/test.getDependency/lastSuccessfulBuild/artifact//json-simple.jar ";
-			}
+			
 			try {
 				print "Attempting to download $fn from artifact custom Url: $url filename=$filename\n";
 				downloadFile($url, $filename);
@@ -407,6 +406,7 @@ if ($task eq "clean") {
 			catch {
 				print ":warning: Warning: Initial download failed for $fn from $url: $_";
 			};
+			}
 			print "download_success = $download_success \n";
     		if (!$download_success && $url ne "") {
 			    print "thirdParty_Url=$thirdParty_Url\n";
