@@ -28,7 +28,7 @@ cluck("File invoked from:");
 my $path;
 # define task
 my $task = "default";
-my $dependencyList = "";
+my $dependencyList = "all";
 my $customUrl = "";
 my $curlOpts = "";
 GetOptions ("path=s" => \$path,
