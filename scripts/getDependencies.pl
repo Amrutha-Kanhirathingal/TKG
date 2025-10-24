@@ -373,7 +373,7 @@ if ($task eq "clean") {
 				$expectedsha = getShaFromFile($shafn, $fn);
 			}
 		}
-
+		print "expectedsha:$expectedsha";
 		if ($expectedsha && $digest eq $expectedsha) {
 			print "$filename exists with correct hash, not downloading\n";
 			next;
@@ -381,7 +381,7 @@ if ($task eq "clean") {
 
 		my $ignoreChecksum = (!defined $sha1 || $sha1 eq '') && (!defined $shaurl || $shaurl eq '');
 		# download the dependent third party jar
-
+		print "ignoreChecksum:$ignoreChecksum";
 		if ($ignoreChecksum && -e $filename) {
 			print "$filename exists, not downloading.\n";
 		} else {
@@ -392,23 +392,24 @@ if ($task eq "clean") {
 			
 			try {
 				print "Attempting to download $fn from artifact custom Url: $url filename=$filename\n";
+
 				downloadFile($url, $filename);
 				$download_success = 1;
 			}
 			catch {
-				print ":warning: Warning: Initial download failed for $fn from $url: $_";
+				print "Warning: Initial download failed for $fn from $url: $_";
 			};
 			}
 			print "download_success = $download_success \n";
 			if (!$download_success && $url ne "") {
 				print "thirdParty_Url=$thirdParty_Url\n";
 				try {
-					print "Falling back to third-party URL for $fn: $thirdParty_Url\n";
+					print "Downloading jar from third-party URL for $fn: $thirdParty_Url\n whe	re url=$url";
 					downloadFile($thirdParty_Url, $filename);
 					$download_success = 1;
 				}
 				catch {
-					print ":warning: Error: Failed to download $fn from third-party URL ($thirdParty_Url): $_";
+					print ":Error: Failed to download $fn from third-party URL ($thirdParty_Url): $_";
 				};
 			}
 			if (!$download_success) {
