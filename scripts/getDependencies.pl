@@ -373,7 +373,7 @@ if ($task eq "clean") {
 			# and parse the file to get the expected sha
 			if (!$expectedsha && $shaurl) {
 				print "shaurl=$shaurl\n shafn=$shafn\n filename=$filename\n expectedsha=$expectedsha\n";
-				if ($filename =~ "json-simple.jar" && ) {
+				if ($filename =~ "json-simple.jar" && $path =~ /system_lib/) {
 				print "filename=$filename\n";
     			$shaurl = "https://openj9-jenkin.osuosl.org/job/test.getDependency/lastSuccessfulBuild/artifact//json-simple.jar ";
 				}
