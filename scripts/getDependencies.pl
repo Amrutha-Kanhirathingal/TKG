@@ -22,6 +22,8 @@ use File::Copy;
 use File::Spec;
 use File::Path qw(make_path);
 use Try::Tiny;
+use Carp 'cluck';
+cluck("File invoked from:");
 # define test src root path
 my $path;
 # define task
@@ -29,7 +31,6 @@ my $task = "default";
 my $dependencyList = "";
 my $customUrl = "";
 my $curlOpts = "";
-my $artifactUrl="";
 GetOptions ("path=s" => \$path,
 			"task=s" => \$task,
 			"dependencyList=s" => \$dependencyList,
@@ -295,7 +296,7 @@ print "Initial jars_info = @jars_info\n";
 foreach my $dependency (keys %jars_to_use) {
 	foreach my $i (@dependencies) {
 		if ($i eq "all" || $dependency eq $i) {
-			            print "Matched: i = $i, dependency = $dependency, jars_to_use = $jars_to_use{$dependency}\n";
+			print "Matched: i = $i, dependency = $dependency, jars_to_use = $jars_to_use{$dependency}\n";
 			push(@jars_info, $jars_to_use{$dependency});
 		}
 	}
@@ -336,11 +337,10 @@ if ($task eq "clean") {
 				$url_custom .= "systemtest_prereqs/";
 				$url_custom .= $jars_info[$i]{dir};
 				$url_custom .= '/' unless $url_custom =~ /\/$/;
-				print "url_custom ne empty: $url_custom\n";
+				print "url_custom when not empty: $url_custom\n";
 			}
 
 			$url = "$url_custom/$jars_info[$i]{fname}";
-			#$artifactUrl = "$url_custom/$jars_info[$i]{fname}";
 			print "url: $url\n";
 			if (defined $shaurl && $shaurl ne '') {
 				$shaurl = "$url_custom/$shafn";
@@ -372,11 +372,6 @@ if ($task eq "clean") {
 			# if expectedsha is not set above and shaurl is provided, download the sha file
 			# and parse the file to get the expected sha
 			if (!$expectedsha && $shaurl) {
-				print "shaurl=$shaurl\n shafn=$shafn\n filename=$filename\n expectedsha=$expectedsha\n";
-				if ($filename =~ "json-simple.jar" && $path =~ /system_lib/) {
-				print "filename=$filename\n";
-    			$shaurl = "https://openj9-jenkin.osuosl.org/job/test.getDependency/lastSuccessfulBuild/artifact//json-simple.jar ";
-				}
 				downloadFile($shaurl, $shafn);
 				$expectedsha = getShaFromFile($shafn, $fn);
 			}
@@ -396,7 +391,7 @@ if ($task eq "clean") {
 			my $download_success = 0;
 			if ($filename =~ "json-simple.jar" && $path =~ /system_lib/) {
 				print "filenamein else=$filename\n";
-    			$url = "https://openj9-jenkin.osuosl.org/job/test.getDependency/lastSuccessfulBuild/artifact//json-simple.jar ";
+				$url = "https://openj9-jenkin.osuosl.org/job/test.getDependency/lastSuccessfulBuild/artifact//json-simple.jar ";
 			
 			try {
 				print "Attempting to download $fn from artifact custom Url: $url filename=$filename\n";
@@ -408,22 +403,22 @@ if ($task eq "clean") {
 			};
 			}
 			print "download_success = $download_success \n";
-    		if (!$download_success && $url ne "") {
-			    print "thirdParty_Url=$thirdParty_Url\n";
-            	try {
+			if (!$download_success && $url ne "") {
+				print "thirdParty_Url=$thirdParty_Url\n";
+				try {
 					print "Falling back to third-party URL for $fn: $thirdParty_Url\n";
-            		downloadFile($thirdParty_Url, $filename);
-            		$download_success = 1;
-    			}
-        		catch {
-         			print ":warning: Error: Failed to download $fn from third-party URL ($thirdParty_Url): $_";
-        		};
-    		}
-    		if (!$download_success) {
-       			print " ERROR: Could not download $fn from either custom or third-party URL.\n";
-       			warn "Skipping $fn due to repeated download failure.\n";
-        		next;  # continue with next jar
-    		}
+					downloadFile($thirdParty_Url, $filename);
+					$download_success = 1;
+				}
+				catch {
+					print ":warning: Error: Failed to download $fn from third-party URL ($thirdParty_Url): $_";
+				};
+			}
+			if (!$download_success) {
+				print " ERROR: Could not download $fn from either custom or third-party URL.\n";
+				warn "Skipping $fn due to repeated download failure.\n";
+				next;  # continue with next jar
+			}
 			# if shaurl is provided, re-download the sha file and reset the expectedsha value
 			# as the dependent third party jar is newly downloadeded
 			if (!$ignoreChecksum) {
