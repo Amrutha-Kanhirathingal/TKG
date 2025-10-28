@@ -403,7 +403,7 @@ if ($task eq "clean") {
 				$download_success = -e $filename ? 1 : 0;
 			}
 			if (!$download_success && $thirdParty_Url) {
-				rint "Downloading $fn from third-party URL: $thirdParty_Url\n";
+				print "Downloading $fn from third-party URL: $thirdParty_Url\n";
 				eval { downloadFile($thirdParty_Url, $filename); 1 } 
 					or warn "Error: Failed to download $fn from third-party URL $thirdParty_Url: $@\n";
 				$download_success = -e $filename ? 1 : 0;
