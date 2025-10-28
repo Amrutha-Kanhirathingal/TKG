@@ -22,8 +22,6 @@ use File::Copy;
 use File::Spec;
 use File::Path qw(make_path);
 use Try::Tiny;
-use Carp 'cluck';
-cluck("File invoked from:");
 # define test src root path
 my $path;
 # define task
@@ -49,13 +47,11 @@ if (! -d $path) {
 
 # define directory path separator
 my $sep = File::Spec->catfile('', '');
-
+$customUrl = $ENV{'CUSTOM_URL'} if !defined($customUrl) || $customUrl eq '';
 print "--------------------------------------------\n";
 print "path is set to $path\n";
 print "task is set to $task\n";
 print "dependencyList is set to $dependencyList\n";
-print "customUrl is set to $customUrl\n";
-$customUrl = $ENV{'CUSTOM_URL'} if !defined($customUrl) || $customUrl eq '';
 print "customUrl is set to $customUrl\n";
 # Define a a hash for each dependent jar
 # Contents in the hash should be:
@@ -196,6 +192,13 @@ my %base = (
 		fname => 'jtreg_8_2.tar.gz',
 		shaurl => 'https://ci.adoptium.net/job/dependency_pipeline/lastSuccessfulBuild/artifact/jtreg/jtreg-8+2.tar.gz.sha256sum.txt',
 		shafn => 'jtreg_8_2.tar.gz.sha256sum.txt',
+		shaalg => '256'
+	},
+	jtreg_8_1_1 => {
+		url => 'https://ci.adoptium.net/job/dependency_pipeline/lastSuccessfulBuild/artifact/jtreg/jtreg-8.1+1.tar.gz',
+		fname => 'jtreg_8_1_1.tar.gz',
+		shaurl => 'https://ci.adoptium.net/job/dependency_pipeline/lastSuccessfulBuild/artifact/jtreg/jtreg-8.1+1.tar.gz.sha256sum.txt',
+		shafn => 'jtreg_8_1_1.tar.gz.sha256sum.txt',
 		shaalg => '256'
 	},
 	jython => {
@@ -388,36 +391,26 @@ if ($task eq "clean") {
 			print "$filename exists, not downloading.\n";
 		} else {
 			my $download_success = 0;
-			# if ($filename =~ "json-simple.jar" && $path =~ /system_lib/) {
-			# 	print "filenamein else=$filename\n";
-			# 	$url = "https://openj9-jenkin.osuosl.org/job/test.getDependency/lastSuccessfulBuild/artifact//json-simple.jar ";
-			
-			try {
-				print "Attempting to download $fn from artifact custom Url: $url filename=$filename\n";
-				die "for now";
-				downloadFile($url, $filename);
-				$download_success = 1;
+			#Remove After Testing
+			if ($filename =~ "json-simple.jar") {
+				print "filenamein else=$filename\n";
+				$url = "https://openj9-jenkin.osuosl.org/job/test.getDependency/lastSuccessfulBuild/artifact//json-simple.jar ";
 			}
-			catch {
-				print "Warning: Initial download failed for $fn from $url: $_";
-			};
-#			}
-			print "download_success = $download_success \n";
-			if (!$download_success && $url ne "") {
-				print "thirdParty_Url=$thirdParty_Url\n";
-				try {
-					print "Downloading jar from third-party URL for $fn: $thirdParty_Url\n whe	re url=$url";
-					downloadFile($thirdParty_Url, $filename);
-					$download_success = 1;
-				}
-				catch {
-					print ":Error: Failed to download $fn from third-party URL ($thirdParty_Url): $_";
-				};
+			if ($url) {
+				print "Attempting to download $fn from custom URL: $url\n";
+				eval { downloadFile($url, $filename); 1 }
+					or warn "Warning: Download failed for $fn from custom URL $url: $@\n";
+				$download_success = -e $filename ? 1 : 0;
 			}
-			if (!$download_success) {
-				print " ERROR: Could not download $fn from either custom or third-party URL.\n";
-				warn "Skipping $fn due to repeated download failure.\n";
-				next;  # continue with next jar
+			if (!$download_success && $thirdParty_Url) {
+				rint "Downloading $fn from third-party URL: $thirdParty_Url\n";
+				eval { downloadFile($thirdParty_Url, $filename); 1 } 
+					or warn "Error: Failed to download $fn from third-party URL $thirdParty_Url: $@\n";
+				$download_success = -e $filename ? 1 : 0;
+			}
+			unless ($download_success) {
+				print "ERROR: Could not download $fn from either custom or third-party URL.\n";
+				next;
 			}
 			# if shaurl is provided, re-download the sha file and reset the expectedsha value
 			# as the dependent third party jar is newly downloadeded
