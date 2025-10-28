@@ -386,20 +386,19 @@ if ($task eq "clean") {
 			print "$filename exists, not downloading.\n";
 		} else {
 			my $download_success = 0;
-			if ($filename =~ "json-simple.jar" && $path =~ /system_lib/) {
-				print "filenamein else=$filename\n";
-				$url = "https://openj9-jenkin.osuosl.org/job/test.getDependency/lastSuccessfulBuild/artifact//json-simple.jar ";
+			# if ($filename =~ "json-simple.jar" && $path =~ /system_lib/) {
+			# 	print "filenamein else=$filename\n";
+			# 	$url = "https://openj9-jenkin.osuosl.org/job/test.getDependency/lastSuccessfulBuild/artifact//json-simple.jar ";
 			
 			try {
 				print "Attempting to download $fn from artifact custom Url: $url filename=$filename\n";
-
 				downloadFile($url, $filename);
 				$download_success = 1;
 			}
 			catch {
 				print "Warning: Initial download failed for $fn from $url: $_";
 			};
-			}
+#			}
 			print "download_success = $download_success \n";
 			if (!$download_success && $url ne "") {
 				print "thirdParty_Url=$thirdParty_Url\n";
