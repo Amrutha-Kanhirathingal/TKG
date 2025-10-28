@@ -54,6 +54,7 @@ print "--------------------------------------------\n";
 print "path is set to $path\n";
 print "task is set to $task\n";
 print "dependencyList is set to $dependencyList\n";
+print "customUrl is set to $customUrl\n";
 
 # Define a a hash for each dependent jar
 # Contents in the hash should be:
