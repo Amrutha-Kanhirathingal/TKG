@@ -124,9 +124,9 @@
 
 	<!-- set default customUrl property to all -->
 		<var name="customUrl" unset="true"/>
-		<property name="customUrl" value="${}" file="jenkins"/>
+		<property name="customUrl" value="${env.CUSTOM_URL}" file="jenkins"/>
 		<exec executable="perl" failonerror="true">
-			<arg line="${TEST_ROOT}/TKG/scripts/getDependencies.pl -path ${LIB_DIR} -task default -dependencyList ${LIB} -customUrl ${env.CUSTOM_URL}"/>
+			<arg line="${TEST_ROOT}/TKG/scripts/getDependencies.pl -path ${LIB_DIR} -task default -dependencyList ${LIB} -customUrl ${customUrl}"/>
 		</exec>
 	</target>
 </project>
