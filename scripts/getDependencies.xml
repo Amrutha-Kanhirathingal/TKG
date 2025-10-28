@@ -123,8 +123,8 @@
 	<target name="getDependentLibs" unless="skipDependency">
 
 	<!-- set default customUrl property to all -->
-		<var name="customUrl" unset="true"/>
-		<property name="customUrl" value="${env.CUSTOM_URL}" file="jenkins"/>
+		<property environment="env" />
+		<property name="customUrl" value="${env.CUSTOM_URL}"/>
 		<exec executable="perl" failonerror="true">
 			<arg line="${TEST_ROOT}/TKG/scripts/getDependencies.pl -path ${LIB_DIR} -task default -dependencyList ${LIB} -customUrl ${customUrl}"/>
 		</exec>
