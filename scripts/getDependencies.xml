@@ -121,12 +121,8 @@
 	</target>
 
 	<target name="getDependentLibs" unless="skipDependency">
-
-	<!-- set default customUrl property to all -->
-		<property environment="env" />
-		<property name="customUrl" value="${env.CUSTOM_URL}"/>
 		<exec executable="perl" failonerror="true">
-			<arg line="${TEST_ROOT}/TKG/scripts/getDependencies.pl -path ${LIB_DIR} -task default -dependencyList ${LIB} -customUrl ${customUrl}"/>
+			<arg line="${TEST_ROOT}/TKG/scripts/getDependencies.pl -path ${LIB_DIR} -task default -dependencyList ${LIB}"/>
 		</exec>
 	</target>
 </project>

@@ -55,7 +55,8 @@ print "path is set to $path\n";
 print "task is set to $task\n";
 print "dependencyList is set to $dependencyList\n";
 print "customUrl is set to $customUrl\n";
-die "for now";
+$customUrl = $ENV{'CUSTOM_URL'} if !defined($customUrl) || $customUrl eq '';
+print "customUrl is set to $customUrl\n";
 # Define a a hash for each dependent jar
 # Contents in the hash should be:
 #   url - required. url to download the dependent jar
@@ -393,6 +394,7 @@ if ($task eq "clean") {
 			
 			try {
 				print "Attempting to download $fn from artifact custom Url: $url filename=$filename\n";
+				die "for now";
 				downloadFile($url, $filename);
 				$download_success = 1;
 			}
