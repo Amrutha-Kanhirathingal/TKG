@@ -21,7 +21,6 @@ use Getopt::Long;
 use File::Copy;
 use File::Spec;
 use File::Path qw(make_path);
-use Try::Tiny;
 # define test src root path
 my $path;
 # define task
