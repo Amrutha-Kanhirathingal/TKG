@@ -391,10 +391,10 @@ if ($task eq "clean") {
 		} else {
 			my $download_success = 0;
 			#Remove After
-			# if ($filename =~ "json-simple.jar") {
-			# 	print "filenamein else=$filename\n";
-			# 	$url = "https://openj9-jenkin.osuosl.org/job/test.getDependency/lastSuccessfulBuild/artifact//json-simple.jar ";
-			# }
+			if ($filename =~ "json-simple.jar") {
+				print "filenamein else=$filename\n";
+				$url = "https://openj9-jenkin.osuosl.org/job/test.getDependency/lastSuccessfulBuild/artifact//json-simple.jar ";
+			}
 			# if ($url) {
 			# 	print "Attempting to download $fn from custom URL: $url\n";
 			# 	eval { downloadFile($url, $filename); 1 }
