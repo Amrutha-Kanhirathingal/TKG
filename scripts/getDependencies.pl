@@ -417,13 +417,13 @@ if ($task eq "clean") {
 			};
 			if (!$download_success) {
     			print "Warning: Download failed for $fn from custom URL $url\n";
-    			print "Trying third-party URL: $third_party_url\n";
+    			print "Trying third-party URL: $thirdParty_Url\n";
 				eval {
-        			downloadFile($third_party_url, $filename);
+        			downloadFile($thirdParty_Url, $filename);
         			$download_success = 1;
     			};
 				if (!$download_success) {
-        			print "Error: Failed to download $fn from third-party URL $third_party_url\n";
+        			print "Error: Failed to download $fn from third-party URL $thirdParty_Url\n";
         			exit 1;
     			}
 			}
