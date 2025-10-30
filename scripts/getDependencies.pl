@@ -391,26 +391,42 @@ if ($task eq "clean") {
 			print "$filename exists, not downloading.\n";
 		} else {
 			my $download_success = 0;
-			#Remove After Testing
-			if ($filename =~ "json-simple.jar") {
-				print "filenamein else=$filename\n";
-				$url = "https://openj9-jenkin.osuosl.org/job/test.getDependency/lastSuccessfulBuild/artifact//json-simple.jar ";
-			}
-			if ($url) {
-				print "Attempting to download $fn from custom URL: $url\n";
-				eval { downloadFile($url, $filename); 1 }
-					or warn "Warning: Download failed for $fn from custom URL $url: $@\n";
-				$download_success = -e $filename ? 1 : 0;
-			}
-			if (!$download_success && $thirdParty_Url) {
-				print "Downloading $fn from third-party URL: $thirdParty_Url\n";
-				eval { downloadFile($thirdParty_Url, $filename); 1 } 
-					or warn "Error: Failed to download $fn from third-party URL $thirdParty_Url: $@\n";
-				$download_success = -e $filename ? 1 : 0;
-			}
-			unless ($download_success) {
-				print "ERROR: Could not download $fn from either custom or third-party URL.\n";
-				next;
+			#Remove After
+			# if ($filename =~ "json-simple.jar") {
+			# 	print "filenamein else=$filename\n";
+			# 	$url = "https://openj9-jenkin.osuosl.org/job/test.getDependency/lastSuccessfulBuild/artifact//json-simple.jar ";
+			# }
+			# if ($url) {
+			# 	print "Attempting to download $fn from custom URL: $url\n";
+			# 	eval { downloadFile($url, $filename); 1 }
+			# 		or warn "Warning: Download failed for $fn from custom URL $url: $@\n";
+			# 	$download_success = -e $filename ? 1 : 0;
+			# }
+			# if (!$download_success && $thirdParty_Url) {
+			# 	print "Downloading $fn from third-party URL: $thirdParty_Url\n";
+			# 	eval { downloadFile($thirdParty_Url, $filename); 1 } 
+			# 		or warn "Error: Failed to download $fn from third-party URL $thirdParty_Url: $@\n";
+			# 	$download_success = -e $filename ? 1 : 0;
+			# }
+			# unless ($download_success) {
+			# 	print "ERROR: Could not download $fn from either custom or third-party URL.\n";
+			# 	next;
+			# }
+			eval {
+				downloadFile($url, $filename);
+				$download_success = 1;
+			};
+			if (!$download_success) {
+    			print "Warning: Download failed for $fn from custom URL $url\n";
+    			print "Trying third-party URL: $third_party_url\n";
+				eval {
+        			downloadFile($third_party_url, $filename);
+        			$download_success = 1;
+    			};
+				if (!$download_success) {
+        			print "Error: Failed to download $fn from third-party URL $third_party_url\n";
+        			exit 1;
+    			}
 			}
 			# if shaurl is provided, re-download the sha file and reset the expectedsha value
 			# as the dependent third party jar is newly downloadeded
