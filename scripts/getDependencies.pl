@@ -315,6 +315,7 @@ if ($task eq "clean") {
 	print "downloading dependent third party jars to $path\n";
 	for my $i (0 .. $#jars_info) {
 		my $url = $jars_info[$i]{url};
+		print "url : $url\n";
 		my $fn = $jars_info[$i]{fname};
 		my $sha1 = $jars_info[$i]{sha1};
 		my $dir = $jars_info[$i]{dir} // "";
@@ -327,7 +328,9 @@ if ($task eq "clean") {
 			}
 		}
 		my $url_custom = $customUrl;
+		print "url_custom : $url_custom\n";
 		my $third_party_url = $url;
+		print "third_party_url : $url\n";
 
 		if (!-d $full_dir_path) {
 			make_path($full_dir_path, {chmod => 0755, verbose => 1}) or die "Failed to create directory: $full_dir_path: $!";
@@ -348,7 +351,7 @@ if ($task eq "clean") {
 			}
 
 			$url = "$url_custom/$jars_info[$i]{fname}";
-
+			print "url_custom/jarinfo url: $url\n";
 			if (defined $shaurl && $shaurl ne '') {
 				$shaurl = "$url_custom/$shafn";
 			}
@@ -379,6 +382,7 @@ if ($task eq "clean") {
 			# if expectedsha is not set above and shaurl is provided, download the sha file
 			# and parse the file to get the expected sha
 			if (!$expectedsha && $shaurl) {
+				print "shaurl: $shaurl\n";
 				downloadFile($shaurl, $shafn);
 				$expectedsha = getShaFromFile($shafn, $fn);
 			}
