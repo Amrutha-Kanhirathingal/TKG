@@ -322,10 +322,11 @@ if ($task eq "clean") {
 		print "jars_info=$jars_info[$i]\n";
 		print "url=$url\n";
 		print "fn=$fn\n";
-		print "sha1=$sha1\n";
+		#print "sha1=$sha1\n";
 		print "dir=$dir\n";
 		print "-------------------\n";
 		my $full_dir_path = File::Spec->catdir($path, $dir);
+		print "full_dir_path=$full_dir_path\n";
 		if (exists($ENV{"BUILD_TYPE"}) && $ENV{"BUILD_TYPE"} eq "systemtest") {
 			$full_dir_path = File::Spec->catdir($path, "systemtest_prereqs" , $dir);
 			print "full_dir_path=$full_dir_path\n";
@@ -346,8 +347,8 @@ if ($task eq "clean") {
 		my $shafn = $jars_info[$i]{shafn};
 		print "-------------------\n";
 		print "filename=$filename\n";
-		print "shaurl=$shaurl\n";
-		print "shafn=$shafn\n";
+		#print "shaurl=$shaurl\n";
+		#print "shafn=$shafn\n";
 		print "url_custom=$url_custom\n";
 		print "-------------------\n";
 		# if url_custom is provided, use url_custom and reset $url and $shaurl
