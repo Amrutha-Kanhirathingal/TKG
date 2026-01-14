@@ -50,6 +50,8 @@ if (! -d $path) {
 my $sep = File::Spec->catfile('', '');
 
 print "--------------------------------------------\n";
+print "customUrl $customUrl\n";
+print "curlOpts $curlOpts\n";
 print "path is set to $path\n";
 print "task is set to $task\n";
 print "dependencyList is set to $dependencyList\n";
@@ -316,16 +318,24 @@ if ($task eq "clean") {
 		my $fn = $jars_info[$i]{fname};
 		my $sha1 = $jars_info[$i]{sha1};
 		my $dir = $jars_info[$i]{dir} // "";
+		print "-------------------\n";
+		print "jars_info=$jars_info[$i]\n";
+		print "url=$url\n";
+		print "fn=$fn\n";
+		print "sha1=$sha1\n";
+		print "dir=$dir\n";
+		print "-------------------\n";
 		my $full_dir_path = File::Spec->catdir($path, $dir);
 		if (exists($ENV{"BUILD_TYPE"}) && $ENV{"BUILD_TYPE"} eq "systemtest") {
 			$full_dir_path = File::Spec->catdir($path, "systemtest_prereqs" , $dir);
+			print "full_dir_path=$full_dir_path\n";
 			if ($fn eq "tools.jar") {
 				toolsJarDownloader("$full_dir_path", "$url");
 				next;
 			}
 		}
 		my $url_custom = $customUrl;
-
+		print "customUrl=url_custom= $customUrl\n";
 		if (!-d $full_dir_path) {
 			make_path($full_dir_path, {chmod => 0755, verbose => 1}) or die "Failed to create directory: $full_dir_path: $!";
 			print "Directory created: $full_dir_path\n";
@@ -334,7 +344,12 @@ if ($task eq "clean") {
 		my $filename = File::Spec->catfile($full_dir_path, $fn);
 		my $shaurl = $jars_info[$i]{shaurl};
 		my $shafn = $jars_info[$i]{shafn};
-
+		print "-------------------\n";
+		print "filename=$filename\n";
+		print "shaurl=$shaurl\n";
+		print "shafn=$shafn\n";
+		print "url_custom=$url_custom\n";
+		print "-------------------\n";
 		# if url_custom is provided, use url_custom and reset $url and $shaurl
 		if ($url_custom ne "") {
 			if (defined $jars_info[$i]{is_system_test} && $jars_info[$i]{is_system_test} == 1) {
@@ -342,10 +357,11 @@ if ($task eq "clean") {
 				$url_custom .= "systemtest_prereqs/";
 				$url_custom .= $jars_info[$i]{dir};
 				$url_custom .= '/' unless $url_custom =~ /\/$/;
+				print "......url_custom........=$url_custom\n";
 			}
 
 			$url = "$url_custom/$jars_info[$i]{fname}";
-
+			print "......url_custom/jars_info[i]fname........=$url\n";
 			if (defined $shaurl && $shaurl ne '') {
 				$shaurl = "$url_custom/$shafn";
 			}
@@ -376,8 +392,14 @@ if ($task eq "clean") {
 			# if expectedsha is not set above and shaurl is provided, download the sha file
 			# and parse the file to get the expected sha
 			if (!$expectedsha && $shaurl) {
+				print "-------------------\n";
+				print "......downloadFile(shaurl,shafn) \n";
 				downloadFile($shaurl, $shafn);
 				$expectedsha = getShaFromFile($shafn, $fn);
+				print "shaurl=$shaurl\n";
+				print "shafn=$shafn\n";
+				print "expectedsha=$expectedsha\n";
+				print "-------------------\n";
 			}
 		}
 
@@ -387,19 +409,27 @@ if ($task eq "clean") {
 		}
 
 		my $ignoreChecksum = (!defined $sha1 || $sha1 eq '') && (!defined $shaurl || $shaurl eq '');
+		print "ignoreChecksum=$ignoreChecksum\n";
 		# download the dependent third party jar
 
 		if ($ignoreChecksum && -e $filename) {
 			print "$filename exists, not downloading.\n";
 		} else {
+			print "before downloadFile url=$url\n";
+			print "before downloadFile filename=$filename\n";
 			downloadFile($url, $filename);
 
 			# if shaurl is provided, re-download the sha file and reset the expectedsha value
 			# as the dependent third party jar is newly downloadeded
 			if (!$ignoreChecksum) {
 				if ($shaurl) {
+					print "-------!ignoreChecksum------------\n";
 					downloadFile($shaurl, $shafn);
 					$expectedsha = getShaFromFile($shafn, $fn);
+					print "shaurl=$shaurl\n";
+					print "shafn=$shafn\n";
+					print "expectedsha=$expectedsha\n";
+					print "-------------------\n";
 				}
 
 				if (!$expectedsha) {
@@ -430,6 +460,7 @@ if ($task eq "clean") {
 # The tools jar is stored within another jar (a JDK) which is accessed indirectly via an api.
 # This subroutine will access the api, download the outer jar, and extract the tools.jar.
 sub toolsJarDownloader {
+	print "toolsJarDownloader ....\n";
 	my ( $dir, $url ) = @_;
 	print "Checksum verification skipped for systemtest_prereqs/tools/tools.jar \n";
 	print "downloading $url \n";
@@ -456,7 +487,7 @@ sub getShaFromFile {
 
 sub downloadFile {
 	my ( $url, $filename ) = @_;
-	print "downloading $url\n";
+	print "downloading $url...$filename\n";
 	my $output;
 
 	# Delete existing file in case it is tagged incorrectly which curl would then honour..
