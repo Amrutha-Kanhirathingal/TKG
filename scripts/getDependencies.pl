@@ -315,10 +315,12 @@ if ($task eq "clean") {
 	print "downloading dependent third party jars to $path\n";
 	for my $i (0 .. $#jars_info) {
 		my $url = $jars_info[$i]{url};
-		print "url : $url\n";
+		print "url/jars_info : $url\n";
 		my $fn = $jars_info[$i]{fname};
 		my $sha1 = $jars_info[$i]{sha1};
 		my $dir = $jars_info[$i]{dir} // "";
+		print "dir : $dir\n";
+		print "fn: $fn\n";
 		my $full_dir_path = File::Spec->catdir($path, $dir);
 		if (exists($ENV{"BUILD_TYPE"}) && $ENV{"BUILD_TYPE"} eq "systemtest") {
 			$full_dir_path = File::Spec->catdir($path, "systemtest_prereqs" , $dir);
@@ -328,7 +330,7 @@ if ($task eq "clean") {
 			}
 		}
 		my $url_custom = $customUrl;
-		print "url_custom : $url_custom\n";
+		print "url_custom/customUrl : $url_custom\n";
 		my $third_party_url = $url;
 		print "third_party_url : $url\n";
 
@@ -354,6 +356,7 @@ if ($task eq "clean") {
 			print "url_custom/jarinfo url: $url\n";
 			if (defined $shaurl && $shaurl ne '') {
 				$shaurl = "$url_custom/$shafn";
+				print "url_custom/shafn shaurl: $shaurl\n";
 			}
 		}
 
@@ -382,9 +385,10 @@ if ($task eq "clean") {
 			# if expectedsha is not set above and shaurl is provided, download the sha file
 			# and parse the file to get the expected sha
 			if (!$expectedsha && $shaurl) {
-				print "shaurl: $shaurl\n";
+				print "downloadFile1:\n";
 				downloadFile($shaurl, $shafn);
 				$expectedsha = getShaFromFile($shafn, $fn);
+				print "expectedsha: $expectedsha\n";
 			}
 		}
 
@@ -395,18 +399,20 @@ if ($task eq "clean") {
 
 		my $ignoreChecksum = (!defined $sha1 || $sha1 eq '') && (!defined $shaurl || $shaurl eq '');
 		# download the dependent third party jar
-
+        print "ignoreChecksum: $ignoreChecksum\n";
 		if ($ignoreChecksum && -e $filename) {
 			print "$filename exists, not downloading.\n";
 		} else {
 			my $download_success = 0;
 			eval {
+				print "before download2 url: $url & $filename\n";
 				downloadFile($url, $filename);
 				$download_success = 1;
 			};
 			if (!$download_success) {
 				print "Warning: Download failed for $filename from custom URL $url\nDownloading $filename from third-party URL: $third_party_url\n";
 				eval {
+					print "before download3 url: $third_party_url & $filename\n";
 					downloadFile($third_party_url, $filename);
 					$download_success = 1;
 				};
@@ -420,6 +426,7 @@ if ($task eq "clean") {
 			# as the dependent third party jar is newly downloadeded
 			if (!$ignoreChecksum) {
 				if ($shaurl) {
+					print "download4 url\n";
 					downloadFile($shaurl, $shafn);
 					$expectedsha = getShaFromFile($shafn, $fn);
 				}
@@ -478,7 +485,7 @@ sub getShaFromFile {
 
 sub downloadFile {
 	my ( $url, $filename ) = @_;
-	print "downloading $url\n";
+	print "downloading $url and $filename\n";
 	my $output;
 
 	# Delete existing file in case it is tagged incorrectly which curl would then honour..
