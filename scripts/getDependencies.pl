@@ -139,7 +139,7 @@ my %base = (
 		sha1 => '99f802e0cb3e953ba3d6e698795c4aeb98d37c48'
 	},
 	json_simple => {
-		url => 'https://repo1.maven.org/maven2/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar1',
+		url => 'https://repo1.maven.org/maven2/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar',
 		fname => 'json-simple.jar',
 		sha1 => 'c9ad4a0850ab676c5c64461a05ca524cdfff59f1'
 	},
@@ -494,6 +494,9 @@ sub downloadFile {
 	}
 
 	my $returnCode = 99;
+	if ($url eq ' https://openj9-jenkins.osuosl.org/job/test.getDependency/lastSuccessfulBuild/artifact//json-simple.jar '){
+		die "ERROR: downloading $url failed, return code: $returnCode\n";
+	}
 	my $download_attempts = 0;
 	while ($returnCode != 0 && $download_attempts < 10) {
 		$download_attempts++;
