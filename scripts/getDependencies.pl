@@ -48,7 +48,7 @@ if (! -d $path) {
 
 # define directory path separator
 my $sep = File::Spec->catfile('', '');
-print "customUrlin: $customUrl --- env.customUrl="$ENV{'CUSTOM_URL'}" \n";
+print "customUrlin: $customUrl env.customUrl=$ENV{'CUSTOM_URL'}\n";
 $customUrl = $ENV{'CUSTOM_URL'} if !defined($customUrl) || $customUrl eq '';
 
 print "--------------------------------------------\n";
