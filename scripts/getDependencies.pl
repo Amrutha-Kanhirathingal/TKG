@@ -386,8 +386,10 @@ if ($task eq "clean") {
 			# if expectedsha is not set above and shaurl is provided, download the sha file
 			# and parse the file to get the expected sha
 			if (!$expectedsha && $shaurl) {
+				print "Download 1 expectedsha=$expectedsha shaurl=$shaurl";
 				downloadFile($shaurl, $shafn);
 				$expectedsha = getShaFromFile($shafn, $fn);
+				print "expectedsha from getShaFromFile =$expectedsha shafn=$shafn,filename=$fn";
 			}
 		}
 
@@ -398,19 +400,21 @@ if ($task eq "clean") {
 
 		my $ignoreChecksum = (!defined $sha1 || $sha1 eq '') && (!defined $shaurl || $shaurl eq '');
 		# download the dependent third party jar
-
+		print "ignoreChecksum=$ignoreChecksum";
 		if ($ignoreChecksum && -e $filename) {
 			print "$filename exists, not downloading.\n";
 			next;
 		}
 		my $download_success = 0;
 		eval {
+			print "Download 2";
 			downloadFile($url, $filename);
 			$download_success = 1;
 		};
 		if (!$download_success) {
 			print "Warning: Download failed for $filename from custom URL $url\nDownloading $filename from third-party URL: $third_party_url\n";
 			eval {
+				print "Download 3";
 				downloadFile($third_party_url, $filename);
 				$download_success = 1;
 			};
@@ -424,6 +428,7 @@ if ($task eq "clean") {
 		# as the dependent third party jar is newly downloadeded
 		if (!$ignoreChecksum) {
 			if ($shaurl) {
+				print "Download 4";
 				downloadFile($shaurl, $shafn);
 				$expectedsha = getShaFromFile($shafn, $fn);
 			}
@@ -509,6 +514,7 @@ sub downloadFile {
 
 	if ($returnCode == 0) {
 		print "--> file downloaded to $filename\n";
+
 	} else {
 		if ($output) {
 			print $output;
