@@ -335,7 +335,8 @@ if ($task eq "clean") {
 		}
 		my $url_custom = $testDependencyUrl;
 		my $third_party_url = $url;
-
+		print "url_custom =$url_custom";
+		print "third_party_url =$third_party_url";
 		if (!-d $full_dir_path) {
 			make_path($full_dir_path, {chmod => 0755, verbose => 1}) or die "Failed to create directory: $full_dir_path: $!";
 			print "Directory created: $full_dir_path\n";
@@ -355,6 +356,7 @@ if ($task eq "clean") {
 			}
 
 			$url = "$url_custom/$jars_info[$i]{fname}";
+			print "url if ne empty =$url";
 
 			if (defined $shaurl && $shaurl ne '') {
 				$shaurl = "$url_custom/$shafn";
@@ -400,6 +402,7 @@ if ($task eq "clean") {
 
 		my $ignoreChecksum = (!defined $sha1 || $sha1 eq '') && (!defined $shaurl || $shaurl eq '');
 		# download the dependent third party jar
+		print "ignoreChecksum1={$ignoreChecksum}";
 		print "ignoreChecksum=$ignoreChecksum";
 		if ($ignoreChecksum && -e $filename) {
 			print "$filename exists, not downloading.\n";
