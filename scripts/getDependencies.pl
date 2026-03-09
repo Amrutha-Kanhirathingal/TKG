@@ -405,7 +405,7 @@ if ($task eq "clean") {
 		print "shaurl=$shaurl\n";
 		my $ignoreChecksum = (!defined $sha1 || $sha1 eq '') && (!defined $shaurl || $shaurl eq '');
 		# download the dependent third party jar
-		print "ignoreChecksum=$ignoreChecksum"\n;
+		print "ignoreChecksum=$ignoreChecksum\n";
 		if ($ignoreChecksum && -e $filename) {
 			print "$filename exists, not downloading.\n";
 			next;
@@ -447,7 +447,7 @@ if ($task eq "clean") {
 			$sha->addfile($filename);
 			$digest = $sha->hexdigest;
 			if ($filename eq 'log4j-api.jar'){
-				$digest=f396c75df02c008aff745ebbff234856e0788732;
+				$digest='f396c75df02c008aff745ebbff234856e0788732';
 			}
 			if ($digest ne $expectedsha) {
 				print "Expected sha is: $expectedsha,\n";
