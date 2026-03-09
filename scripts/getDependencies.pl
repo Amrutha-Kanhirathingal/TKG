@@ -376,6 +376,7 @@ if ($task eq "clean") {
 		}
 
 		my $expectedsha = $jars_info[$i]{sha1};
+		print "expectedsha=$expectedsha";
 		if (!$expectedsha) {
 			if (defined $shafn && $shafn ne '') {
 				$shafn = $path . $sep . $shafn;
@@ -402,8 +403,7 @@ if ($task eq "clean") {
 
 		my $ignoreChecksum = (!defined $sha1 || $sha1 eq '') && (!defined $shaurl || $shaurl eq '');
 		# download the dependent third party jar
-		print "ignoreChecksum1={$ignoreChecksum}";
-		print "ignoreChecksum=$ignoreChecksum";
+		print "ignoreChecksum=$ignoreChecksum"\n;
 		if ($ignoreChecksum && -e $filename) {
 			print "$filename exists, not downloading.\n";
 			next;
