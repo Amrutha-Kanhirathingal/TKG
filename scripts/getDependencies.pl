@@ -431,6 +431,7 @@ if ($task eq "clean") {
 
 		# if shaurl is provided, re-download the sha file and reset the expectedsha value
 		# as the dependent third party jar is newly downloadeded
+		print "ignoreChecksum=$ignoreChecksum\n";
 		if (!$ignoreChecksum) {
 			if ($shaurl) {
 				print "Download 4..... shaurl=$shaurl\n";
