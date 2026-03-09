@@ -431,7 +431,7 @@ if ($task eq "clean") {
 
 		# if shaurl is provided, re-download the sha file and reset the expectedsha value
 		# as the dependent third party jar is newly downloadeded
-		print "ignoreChecksum=$ignoreChecksum\n";
+		print "ignoreChecksum1=$ignoreChecksum\n";
 		if (!$ignoreChecksum) {
 			if ($shaurl) {
 				print "Download 4..... shaurl=$shaurl\n";
@@ -447,7 +447,7 @@ if ($task eq "clean") {
 			$sha = Digest::SHA->new($shaalg);
 			$sha->addfile($filename);
 			$digest = $sha->hexdigest;
-			if ($filename eq 'log4j-api.jar'){
+			if ($filename eq 'json-simple.jar'){
 				$digest='f396c75df02c008aff745ebbff234856e0788732';
 			}
 			if ($digest ne $expectedsha) {
