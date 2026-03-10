@@ -213,6 +213,11 @@ my %base = (
 		fname => 'jcstress-tests-all-20240222.jar',
 		sha1 => '200da75e67689e8a604ec6fe9a6f55b2c000b6ce'
 	},
+	liberty_runtime => {
+		url => 'https://public.dhe.ibm.com/ibmdl/export/pub/software/openliberty/runtime/release/24.0.0.1/openliberty-24.0.0.1.zip',
+		fname => 'openliberty-runtime.zip',
+		sha1 => 'c59edb53e8e88e674b67f0941e1abfc30eb0cd49'
+	},
 	maven => {
 		url => 'https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.10/apache-maven-3.9.10-bin.tar.gz',
 		fname => 'apache-maven-bin.tar.gz',
