@@ -13,7 +13,42 @@
 # limitations under the License.
 -->
 <project name="getDependency" default="getDependentLibs" basedir=".">
-	<taskdef resource="net/sf/antcontrib/antlib.xml"/>
+	<!-- Dynamically detect ant-contrib.jar location at build time -->
+	<echo message="Ant version: ${ant.version}"/>
+	<echo message="Ant home: ${ant.home}"/>
+	
+	<!-- Search for ant-contrib.jar in ant.home/lib directory -->
+	<pathconvert property="ant.contrib.jar" setonempty="false">
+		<first count="1">
+			<fileset dir="${ant.home}/lib" includes="ant-contrib*.jar" erroronmissingdir="false"/>
+		</first>
+	</pathconvert>
+	
+	<!-- If not found, search in user's .ant/lib directory -->
+	<pathconvert property="ant.contrib.jar" setonempty="false">
+		<first count="1">
+			<fileset dir="${user.home}/.ant/lib" includes="ant-contrib*.jar" erroronmissingdir="false"/>
+		</first>
+	</pathconvert>
+	
+	<!-- Fail if not found -->
+	<fail message="ERROR: ant-contrib.jar not found in ${ant.home}/lib or ${user.home}/.ant/lib">
+		<condition>
+			<not>
+				<isset property="ant.contrib.jar"/>
+			</not>
+		</condition>
+	</fail>
+	
+	<echo message="Using: ${ant.contrib.jar}"/>
+	
+	<!-- Load ant-contrib with explicit classpath -->
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<pathelement location="${ant.contrib.jar}"/>
+		</classpath>
+	</taskdef>
+	
 	<description>
 		Get Third Party Dependencies
 	</description>
