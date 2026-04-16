@@ -24,6 +24,18 @@ export OLD_JAVA_HOME := $(JAVA_HOME)
 export JAVA_HOME := $(TEST_JDK_HOME)
 $(info JAVA_HOME is set to $(JAVA_HOME))
 endif
+ANT_PATH := $(shell which ant 2>/dev/null)
+ANT_VERSION := $(shell ant -version 2>/dev/null | head -1)
+ANT_HOME := $(shell ant -diagnostics 2>/dev/null | grep "ant.home:" | head -1 | cut -d: -f2- | xargs)
+ANT_CONTRIB_JAR := $(shell find $(ANT_HOME)/lib $(HOME)/.ant/lib /usr/share /usr/local -name "ant-contrib*.jar" 2>/dev/null | head -1)
+
+# Display detection results
+$(info ========================================)
+$(info Ant executable: $(ANT_PATH))
+$(info Ant version: $(ANT_VERSION))
+$(info Ant home: $(ANT_HOME))
+$(info ant-contrib.jar: $(ANT_CONTRIB_JAR))
+$(info ========================================)
 
 D = /
 MKTREE = mkdir -p
@@ -100,19 +112,6 @@ endif
 # compile tools
 #######################################
 include moveDmp.mk
-ANT_PATH := $(shell which ant 2>/dev/null)
-ANT_VERSION := $(shell ant -version 2>/dev/null | head -1)
-ANT_HOME := $(shell ant -diagnostics 2>/dev/null | grep "ant.home:" | head -1 | cut -d: -f2- | xargs)
-ANT_CONTRIB_JAR := $(shell find $(ANT_HOME)/lib $(HOME)/.ant/lib /usr/share /usr/local -name "ant-contrib*.jar" 2>/dev/null | head -1)
-
-# Display detection results
-$(info ========================================)
-$(info Ant executable: $(ANT_PATH))
-$(info Ant version: $(ANT_VERSION))
-$(info Ant home: $(ANT_HOME))
-$(info ant-contrib.jar: $(ANT_CONTRIB_JAR))
-$(info ========================================)
-
 # If ant-contrib.jar found, add it to ant classpath
 ifneq ($(ANT_CONTRIB_JAR),)
 ANT_CLASSPATH := -lib $(ANT_CONTRIB_JAR)
