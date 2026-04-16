@@ -21,6 +21,14 @@
 	<!-- Dynamically detect ant-contrib.jar location at build time -->
 	<echo message="Ant version: ${ant.version}"/>
 	<echo message="Ant home: ${ant.home}"/>
+	<echo message="Usr home: ${user.home}"/>
+	
+	<!-- Check ant.home directory permissions -->
+	<exec executable="ls" outputproperty="ant.home.listing" failonerror="false">
+		<arg value="-la"/>
+		<arg value="${ant.home}/lib/ant-contrib.jar"/>
+	</exec>
+	<echo message="ant.home lib listing: ${ant.home.listing}"/>
 	
 	<!-- Search for ant-contrib.jar in ant.home/lib directory -->
 	<pathconvert property="ant.contrib.jar" setonempty="false">
