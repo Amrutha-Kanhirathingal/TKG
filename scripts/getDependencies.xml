@@ -13,6 +13,10 @@
 # limitations under the License.
 -->
 <project name="getDependency" default="getDependentLibs" basedir=".">
+	<echo message="Ant version: ${ant.version}"/>
+	<echo message="Ant home: ${ant.home}"/>
+	<echo message="User home: ${user.home}"/>
+	<echo message="Using: ${ant.contrib.jar}"/>
 	<taskdef resource="net/sf/antcontrib/antlib.xml"/>
 	<description>
 		Get Third Party Dependencies
