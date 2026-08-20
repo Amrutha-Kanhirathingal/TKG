@@ -25,11 +25,19 @@
 	<property name="LIB" value="json_simple"/>
 	<import file="./getDependencies.xml"/>
 
+	<property environment="env" />
+	<condition property="skipToolsCompilation">
+		<or>
+			<equals arg1="${USE_JRE}" arg2="1" />
+			<equals arg1="${env.USE_JRE}" arg2="1" />
+		</or>
+	</condition>
+
 	<target name="init">
 		<mkdir dir="${build}" />
 	</target>
 
-	<target name="compile" depends="init,getDependentLibs" description="Using java ${JDK_VERSION} to compile the source  ">
+	<target name="compile" depends="init,getDependentLibs" unless="skipToolsCompilation" description="Using java ${JDK_VERSION} to compile the source  ">
 		<echo>Ant version is ${ant.version}</echo>
 		<echo>============COMPILER SETTINGS============</echo>
 		<echo>===fork:                         yes</echo>
@@ -41,13 +49,13 @@
 		</javac>
 	</target>
 
-	<target name="dist" depends="compile" description="generate the distribution">
+	<target name="dist" depends="compile" unless="skipToolsCompilation" description="generate the distribution">
 		<jar jarfile="${build}/TestKitGen.jar" filesonly="true">
 			<fileset dir="${build}"/>
 		</jar>
 	</target>
 
-	<target name="clean" description="clean up">
+	<target name="clean" unless="skipToolsCompilation" description="clean up">
 		<delete file="../autoGenEnv.mk" />
 		<delete file="../utils.mk" />
 		<delete dir="${build}" />

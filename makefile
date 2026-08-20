@@ -77,8 +77,12 @@ endif
 # compile test materials
 #######################################
 compile: buildListGen
+ifeq ($(USE_JRE),1)
+	@echo "Skip compilation step as USE_JRE is enabled
+else
 	$(MAKE) -f clean.mk cleanBuild
 	$(MAKE) -f compile.mk compile
+endif
 
 #######################################
 # If AUTO_DETECT is turned on, compile and execute envDetector in build_envInfo.xml.
