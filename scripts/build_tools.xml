@@ -49,13 +49,13 @@
 		</javac>
 	</target>
 
-	<target name="dist" depends="compile" unless="skipToolsCompilation" description="generate the distribution">
+	<target name="dist" depends="compile" description="generate the distribution">
 		<jar jarfile="${build}/TestKitGen.jar" filesonly="true">
 			<fileset dir="${build}"/>
 		</jar>
 	</target>
 
-	<target name="clean" unless="skipToolsCompilation" description="clean up">
+	<target name="clean" description="clean up">
 		<delete file="../autoGenEnv.mk" />
 		<delete file="../utils.mk" />
 		<delete dir="${build}" />
