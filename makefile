@@ -78,7 +78,7 @@ endif
 #######################################
 compile: buildListGen
 ifeq ($(USE_JRE),1)
-	@echo "Skip compilation step as USE_JRE is enabled
+	@echo "Skip compilation step as USE_JRE is enabled"
 else
 	$(MAKE) -f clean.mk cleanBuild
 	$(MAKE) -f compile.mk compile
@@ -88,7 +88,11 @@ endif
 # If AUTO_DETECT is turned on, compile and execute envDetector in build_envInfo.xml.
 #######################################
 envDetect: compileTools
+ifeq ($(SKIP_ENV_DETECT),1)
+	@echo "Skip envDetect step as SKIP_ENV_DETECT is set to 1"
+else
 	${TEST_JDK_HOME}$(D)bin$(D)java -cp .$(D)bin$(D)TestKitGen.jar org.openj9.envInfo.EnvDetector
+endif
 
 #######################################
 # Generate refined BUILD_LIST.
@@ -109,10 +113,14 @@ include moveDmp.mk
 COMPILE_TOOLS_CMD=ant -f .$(D)scripts$(D)build_tools.xml $(Q)-DTEST_JDK_HOME=$(TEST_JDK_HOME)$(Q) $(Q)-DTEST_ROOT=$(TEST_ROOT)$(Q) $(Q)-DLIB_DIR=$(LIB_DIR)$(Q)
 
 compileTools:
+ifeq ($(SKIP_COMPILE_TOOLS),1)
+	@echo "Skip compileTools step as SKIP_COMPILE_TOOLS is set to 1"
+else
 	$(RM) -r $(COMPILATION_OUTPUT); \
 	$(MKTREE) $(COMPILATION_OUTPUT); \
 	($(COMPILE_TOOLS_CMD) 2>&1; echo $$? ) | tee $(Q)$(COMPILATION_LOG)$(Q); \
 	$(MOVE_TDUMP)
+endif
 
 #######################################
 # compile and run all tests
